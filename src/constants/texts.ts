@@ -1,4 +1,5 @@
 import { HightlightsSlide, Model, Size } from "@/types";
+import { blackImgPath, blueImgPath, highlightFirstVideoPath, highlightFourthVideoPath, highlightSecondVideoPath, highlightThirdVideoPath, whiteImgPath, yellowImgPath } from "./paths";
 
 export const navLists = ["Store", "Mac", "iPhone", "Support"];
 
@@ -10,13 +11,13 @@ export const hightlightsSlides: HightlightsSlide[] = [
       "Game‑changing chip.",
       "Groundbreaking performance.",
     ],
-    videoPath: '/assets/video/highlight-first.mp4',
+    videoPath: highlightFirstVideoPath,
     videoDuration: 4,
   },
   {
     id: 2,
     textLists: ["Titanium.", "So strong. So light. So Pro."],
-    videoPath: '/assets/video/highlight-sec.mp4',
+    videoPath: highlightSecondVideoPath,
     videoDuration: 5,
   },
   {
@@ -26,13 +27,13 @@ export const hightlightsSlides: HightlightsSlide[] = [
       "longest optical zoom in",
       "iPhone ever. Far out.",
     ],
-    videoPath: '/assets/video/highlight-third.mp4',
+    videoPath: highlightThirdVideoPath,
     videoDuration: 2,
   },
   {
     id: 4,
     textLists: ["All-new Action button.", "What will yours do?."],
-    videoPath: '/assets/video/highlight-fourth.mp4',
+    videoPath: highlightFourthVideoPath,
     videoDuration: 3.63,
   },
 ];
@@ -42,25 +43,25 @@ export const models: Model[] = [
     id: 1,
     title: "iPhone 15 Pro in Natural Titanium",
     color: ["#8F8A81", "#ffe7b9", "#6f6c64"],
-    imgPath: "/assets/images/yellow.jpg",
+    imgPath: yellowImgPath,
   },
   {
     id: 2,
     title: "iPhone 15 Pro in Blue Titanium",
     color: ["#53596E", "#6395ff", "#21242e"],
-    imgPath: "/assets/images/blue.jpg",
+    imgPath: blueImgPath,
   },
   {
     id: 3,
     title: "iPhone 15 Pro in White Titanium",
     color: ["#C9C8C2", "#ffffff", "#C9C8C2"],
-    imgPath: "/assets/images/white.jpg",
+    imgPath: whiteImgPath,
   },
   {
     id: 4,
     title: "iPhone 15 Pro in Black Titanium",
     color: ["#454749", "#3b3b3b", "#181819"],
-    imgPath: "/assets/images/black.jpg",
+    imgPath: blackImgPath,
   },
 ];
 

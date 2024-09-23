@@ -1,6 +1,7 @@
 import { rightImgPath, watchImgPath } from "@/constants/paths";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
+import VideoCarousel from "./VideoCarousel";
 
 export default function Highlights() {
   useGSAP(() => {
@@ -25,6 +26,8 @@ export default function Highlights() {
             </button>
           </div>
         </div>
+        
+        <VideoCarousel />
       </div>
     </section>
   )

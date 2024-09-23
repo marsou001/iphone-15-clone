@@ -1,7 +1,7 @@
 export const heroVideoPath = "/assets/videos/hero.mp4";
 export const smallHeroVideoPath = "/assets/videos/smallHero.mp4";
 export const highlightFirstVideoPath = "/assets/videos/highlight-first.mp4";
-export const highlightSecondVideoPath = "/assets/videos/highlight-firssec.mp4";
+export const highlightSecondVideoPath = "/assets/videos/highlight-sec.mp4";
 export const highlightThirdVideoPath = "/assets/videos/highlight-third.mp4";
 export const highlightFourthVideoPath = "/assets/videos/highlight-fourth.mp4";
 export const exploreVideoPath = "/assets/videos/explore.mp4";
