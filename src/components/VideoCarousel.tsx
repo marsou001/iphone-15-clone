@@ -42,10 +42,6 @@ export default function VideoCarousel() {
     })
   }, [isEnd, id]);
 
-  function handleVideoPlay() {
-    setVideo((prevVideo) => ({ ...prevVideo, isPlaying: true }));
-  }
-  
   function handleProcess(...args: [type: ProcessType.VIDEO_END, index: number] | [type: Exclude<ProcessType, ProcessType.VIDEO_END>]) {
     switch (args[0]) {
       case ProcessType.VIDEO_END:
@@ -132,7 +128,7 @@ export default function VideoCarousel() {
                   muted
                   ref={(el) => { videoRef.current[i] = el! }}
                   className={`${slide.id === 2 && 'translate-x-44'} pointer-events-none`}
-                  onPlay={handleVideoPlay}   
+                  onPlay={() => handleProcess(ProcessType.PLAY)}   
                   onEnded={() =>
                     i !== 3 
                       ? handleProcess(ProcessType.VIDEO_END, i)
