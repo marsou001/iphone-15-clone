@@ -75,7 +75,7 @@ export default function VideoCarousel() {
     }
   }, [startPlay, id, isPlaying]);
 
-  useEffect(() => {
+  useGSAP(() => {
     const span = videoSpanRef.current;
     const div  = videoDivRef.current;
     let currentProgress = 0;
