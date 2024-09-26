@@ -59,8 +59,8 @@ export default function VideoCarousel() {
     gsap.to(".video-carousel_container video", {
       scrollTrigger: {
         trigger: ".video-carousel_container video",
-        toggleActions: "restart none none none",
-          },
+        toggleActions: "play none none none",
+      },
       onComplete: () => {
         setVideo((prevVideo) => ({ ...prevVideo, startPlay: true, isPlaying: true }));
       },
