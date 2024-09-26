@@ -81,8 +81,6 @@ export default function VideoCarousel() {
     const div  = videoDivRef.current;
     let currentProgress = 0;
 
-    if (span === undefined) return;
-
     let animation = gsap.to(span[id], {
       onUpdate: () => {
         const progress = Math.ceil(animation.progress() * 100);
