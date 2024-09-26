@@ -24,13 +24,8 @@ export default function VideoCarousel() {
 
   const { id, isEnd, startPlay, isLastVideo, isPlaying } = video;
 
+  // Videos on slider only start playing on view scope
   useGSAP(() => {
-    gsap.to(".slide", {
-      transform: `translateX(${-100 * id}%)`,
-      duration: 2,
-      ease: "power2.inOut"
-    });
-
     gsap.to(".video-carousel_container video", {
       scrollTrigger: {
         trigger: ".video-carousel_container video",
@@ -40,6 +35,14 @@ export default function VideoCarousel() {
         setVideo((prevVideo) => ({ ...prevVideo, startPlay: true, isPlaying: true }));
       },
     })
+  });
+
+  useGSAP(() => {
+    gsap.to(".slide", {
+      transform: `translateX(${-100 * id}%)`,
+      duration: 2,
+      ease: "power2.inOut"
+    });
   }, [isEnd, id]);
 
   function handleProcess(...args: [type: ProcessType.VIDEO_END, index: number] | [type: Exclude<ProcessType, ProcessType.VIDEO_END>]) {
