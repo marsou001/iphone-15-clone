@@ -24,24 +24,32 @@ export default function VideoCarousel() {
 
   const { id, isEnd, startPlay, isLastVideo, isPlaying } = video;
 
-  useGSAP(() => gsap.to(".video-carousel_container video", {
-    scrollTrigger: {
-      trigger: ".video-carousel_container video",
-      toggleActions: "restart none none none",
-    },
-    onComplete: () => {
-      setVideo((prevVideo) => ({ ...prevVideo, startPlay: true, isPlaying: true }));
-    },
-  }), [isEnd, id]);
+  useGSAP(() => {
+    gsap.to(".slide", {
+      transform: `translateX(${-100 * id}%)`,
+      duration: 2,
+      ease: "power2.inOut"
+    });
+
+    gsap.to(".video-carousel_container video", {
+      scrollTrigger: {
+        trigger: ".video-carousel_container video",
+        toggleActions: "restart none none none",
+      },
+      onComplete: () => {
+        setVideo((prevVideo) => ({ ...prevVideo, startPlay: true, isPlaying: true }));
+      },
+    })
+  }, [isEnd, id]);
 
   function handleVideoPlay() {
     setVideo((prevVideo) => ({ ...prevVideo, isPlaying: true }));
   }
-
-  function handleProcess(type: ProcessType) {
-    switch (type) {
+  
+  function handleProcess(...args: [type: ProcessType.VIDEO_END, index: number] | [type: Exclude<ProcessType, ProcessType.VIDEO_END>]) {
+    switch (args[0]) {
       case ProcessType.VIDEO_END:
-        setVideo((prevVideo) => ({ ...prevVideo, isEnd: true, id: prevVideo.id + 1 }));
+        setVideo((prevVideo) => ({ ...prevVideo, isEnd: true, id: args[1] + 1 }));
         break;
       case ProcessType.VIDEO_LAST:
         setVideo((prevVideo) => ({ ...prevVideo, isLastVideo: true }));
@@ -50,7 +58,10 @@ export default function VideoCarousel() {
         setVideo((prevVideo) => ({ ...prevVideo, isLastVideo: false, id: 0 }));
         break;
       case ProcessType.PLAY:
-        setVideo((prevVideo) => ({ ...prevVideo, isPlaying: !prevVideo.isPlaying }));
+        setVideo((prevVideo) => ({ ...prevVideo, isPlaying: true }));
+        break;
+      case ProcessType.PAUSE:
+        setVideo((prevVideo) => ({ ...prevVideo, isPlaying: false }));
         break;
       default:
         return video;
@@ -66,14 +77,47 @@ export default function VideoCarousel() {
   }, [startPlay, id, isPlaying]);
 
   useEffect(() => {
-    const currentProgress = 0;
+    let currentProgress = 0;
     let span = videoSpanRef.current;
 
-    if (span !== undefined && span[id]) {
-      let animation = gsap.to(span[id], {
-        onUpdate: () => {},
-        onComplete: () => {},
-      });
+    if (span === undefined) return;
+
+    let animation = gsap.to(span[id], {
+      onUpdate: () => {
+        const progress = Math.ceil(animation.progress() * 100);
+        
+        if (currentProgress !== progress) {
+          currentProgress = progress;
+          gsap.to(videoDivRef.current[id], {
+            width: window.innerWidth < 1200 ? "10vw" : "4vw",
+          })
+        }
+
+        gsap.to(span[id], {
+          width: currentProgress + "%",
+          backgroundColor: "white",
+        })
+      },
+      onComplete: () => {
+        if (isPlaying) {
+          gsap.to(videoDivRef.current[id], { width: '12px' });
+          gsap.to(span[id], { backgroundColor: "#afafaf" });
+        }
+      },
+      // duration: videoRef.current[id].duration,
+    });
+    
+    if (id === 0) animation.restart();
+
+    function updateAnimation() {
+      const { currentTime, duration } = videoRef.current[id];
+      animation.progress(currentTime / duration);
+    }
+
+    if (isPlaying) {
+      gsap.ticker.add(updateAnimation);
+    } else {
+      gsap.ticker.remove(updateAnimation);
     }
   }, [id, startPlay]);
 
@@ -81,14 +125,20 @@ export default function VideoCarousel() {
     <>
       <div className="flex items-center">
         {hightlightsSlides.map((slide, i) => (
-          <div key={slide.id} className="sm:pr-20 pr-10">
+          <div key={slide.id} className="slide sm:pr-20 pr-10">
             <div className="video-carousel_container">
               <div className="bg-black w-full h-full flex-center rounded-3xl overflow-hidden">
                 <video
                   playsInline
                   muted
                   ref={(el) => { videoRef.current[i] = el! }}
+                  className={`${slide.id === 2 && 'translate-x-44'} pointer-events-none`}
                   onPlay={handleVideoPlay}   
+                  onEnded={() =>
+                    i !== 3 
+                      ? handleProcess(ProcessType.VIDEO_END, i)
+                      : handleProcess(ProcessType.VIDEO_LAST)
+                  }
                 >
                   <source src={slide.videoPath} type="video/mp4" />
                 </video>
@@ -130,7 +180,7 @@ export default function VideoCarousel() {
               ? () => handleProcess(ProcessType.VIDEO_RESET)
               : !isPlaying
                 ? () => handleProcess(ProcessType.PLAY)
-                : () => handleProcess(ProcessType.VIDEO_END)
+                : () => handleProcess(ProcessType.PAUSE)
             }
           />
         </button>
