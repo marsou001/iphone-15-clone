@@ -20,7 +20,7 @@ export default function VideoCarousel() {
 
   const videoRef = useRef<HTMLVideoElement[]>([]);
   const videoSpanRef = useRef<HTMLSpanElement[]>([]);
-  const videoDivRef = useRef<HTMLSpanElement[]>([]);
+  const videoDivRef = useRef<HTMLDivElement[]>([]);
 
   const { id, isEnd, startPlay, isLastVideo, isPlaying } = video;
 
@@ -77,8 +77,9 @@ export default function VideoCarousel() {
   }, [startPlay, id, isPlaying]);
 
   useEffect(() => {
+    const span = videoSpanRef.current;
+    const div  = videoDivRef.current;
     let currentProgress = 0;
-    let span = videoSpanRef.current;
 
     if (span === undefined) return;
 
@@ -88,7 +89,7 @@ export default function VideoCarousel() {
         
         if (currentProgress !== progress) {
           currentProgress = progress;
-          gsap.to(videoDivRef.current[id], {
+          gsap.to(div[id], {
             width: window.innerWidth < 1200 ? "10vw" : "4vw",
           })
         }
@@ -100,7 +101,7 @@ export default function VideoCarousel() {
       },
       onComplete: () => {
         if (isPlaying) {
-          gsap.to(videoDivRef.current[id], { width: '12px' });
+          gsap.to(div[id], { width: '12px' });
           gsap.to(span[id], { backgroundColor: "#afafaf" });
         }
       },
@@ -159,7 +160,7 @@ export default function VideoCarousel() {
       <div className="relative flex-center mt-10">
         <div className="flex-center py-5 px-7 bg-gray-300 backdrop-blur rounded-full">
           {hightlightsSlides.map((_, i) => (
-            <span
+            <div
               key={i}
               ref={(el) => { videoDivRef.current[i] = el! }}
               className="mx-2 w-3 h-3 bg-gray-200 rounded-full relative cursor-pointer"
@@ -168,7 +169,7 @@ export default function VideoCarousel() {
                 ref={(el) => { videoSpanRef.current[i] = el! }}
                 className="absolute h-full w-full rounded-full"
               />
-            </span>
+            </div>
           ))}
         </div>
 
