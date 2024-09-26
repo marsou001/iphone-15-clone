@@ -24,27 +24,6 @@ export default function VideoCarousel() {
 
   const { id, isEnd, startPlay, isLastVideo, isPlaying } = video;
 
-  // Videos on slider only start playing on view scope
-  useGSAP(() => {
-    gsap.to(".video-carousel_container video", {
-      scrollTrigger: {
-        trigger: ".video-carousel_container video",
-        toggleActions: "restart none none none",
-      },
-      onComplete: () => {
-        setVideo((prevVideo) => ({ ...prevVideo, startPlay: true, isPlaying: true }));
-      },
-    })
-  });
-
-  useGSAP(() => {
-    gsap.to(".slide", {
-      transform: `translateX(${-100 * id}%)`,
-      duration: 2,
-      ease: "power2.inOut"
-    });
-  }, [isEnd, id]);
-
   function handleProcess(...args: [type: ProcessType.VIDEO_END, index: number] | [type: Exclude<ProcessType, ProcessType.VIDEO_END>]) {
     switch (args[0]) {
       case ProcessType.VIDEO_END:
@@ -75,6 +54,29 @@ export default function VideoCarousel() {
     }
   }, [startPlay, id, isPlaying]);
 
+  // Videos on slider only start playing on view scope
+  useGSAP(() => {
+    gsap.to(".video-carousel_container video", {
+      scrollTrigger: {
+        trigger: ".video-carousel_container video",
+        toggleActions: "restart none none none",
+          },
+      onComplete: () => {
+        setVideo((prevVideo) => ({ ...prevVideo, startPlay: true, isPlaying: true }));
+      },
+    })
+  });
+
+  //Move to the next slide on video change
+  useGSAP(() => {
+    gsap.to(".slide", {
+      transform: `translateX(${-100 * id}%)`,
+      duration: 2,
+      ease: "power2.inOut"
+    });
+  }, [isEnd, id]);  
+
+  // Handles dots displaying currently playing video and its progress
   useGSAP(() => {
     const span = videoSpanRef.current;
     const div  = videoDivRef.current;
@@ -95,9 +97,6 @@ export default function VideoCarousel() {
           width: currentProgress + "%",
           backgroundColor: "white",
         })
-
-        const { currentTime, duration } = videoRef.current[id];
-      animation.progress(currentTime / duration);
       },
       onComplete: () => {
         gsap.to(div[id], { width: '12px' });
@@ -112,11 +111,11 @@ export default function VideoCarousel() {
       animation.progress(currentTime / duration);
     }
 
-    // if (isPlaying) {
-    //   gsap.ticker.add(updateAnimation);
-    // } else {
-    //   gsap.ticker.remove(updateAnimation);
-    // }
+    if (isPlaying) {
+      gsap.ticker.add(updateAnimation);
+    } else {
+      gsap.ticker.remove(updateAnimation);
+    }
   }, [id, startPlay]);
 
   return (
