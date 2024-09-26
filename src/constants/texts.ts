@@ -12,13 +12,11 @@ export const hightlightsSlides: HightlightsSlide[] = [
       "Groundbreaking performance.",
     ],
     videoPath: highlightFirstVideoPath,
-    videoDuration: 4,
   },
   {
     id: 2,
     textLists: ["Titanium.", "So strong. So light. So Pro."],
     videoPath: highlightSecondVideoPath,
-    videoDuration: 5,
   },
   {
     id: 3,
@@ -28,13 +26,11 @@ export const hightlightsSlides: HightlightsSlide[] = [
       "iPhone ever. Far out.",
     ],
     videoPath: highlightThirdVideoPath,
-    videoDuration: 2,
   },
   {
     id: 4,
     textLists: ["All-new Action button.", "What will yours do?."],
     videoPath: highlightFourthVideoPath,
-    videoDuration: 3.63,
   },
 ];
 
