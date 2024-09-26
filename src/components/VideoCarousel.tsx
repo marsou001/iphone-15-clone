@@ -95,28 +95,28 @@ export default function VideoCarousel() {
           width: currentProgress + "%",
           backgroundColor: "white",
         })
+
+        const { currentTime, duration } = videoRef.current[id];
+      animation.progress(currentTime / duration);
       },
       onComplete: () => {
-        if (isPlaying) {
-          gsap.to(div[id], { width: '12px' });
-          gsap.to(span[id], { backgroundColor: "#afafaf" });
-        }
+        gsap.to(div[id], { width: '12px' });
+        gsap.to(span[id], { backgroundColor: "#afafaf" });
       },
-      // duration: videoRef.current[id].duration,
     });
     
-    if (id === 0) animation.restart();
-
+    // Don't use the `duration` property because the animation will carry on even if you pause
+    // Use this instead to control the animation progress manually
     function updateAnimation() {
       const { currentTime, duration } = videoRef.current[id];
       animation.progress(currentTime / duration);
     }
 
-    if (isPlaying) {
-      gsap.ticker.add(updateAnimation);
-    } else {
-      gsap.ticker.remove(updateAnimation);
-    }
+    // if (isPlaying) {
+    //   gsap.ticker.add(updateAnimation);
+    // } else {
+    //   gsap.ticker.remove(updateAnimation);
+    // }
   }, [id, startPlay]);
 
   return (
